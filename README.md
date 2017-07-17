@@ -702,7 +702,93 @@ doSomething(with: .silver) // 함수 정의에 타입 어노테이션이 있기 
 
 # 8. 함수와 클로저
 
+## 함수
 
+> 함수는 func 키워드를 사용해서 정의합니다. -> 를 사용해서 함수의 반환 타입을 지정합니다.
+
+```swift
+func hello(name: String, time: Int) -> String {
+  var string = ""
+  for _ in 0..<time {
+    string += "\(name)님 안녕하세요!\n"
+  }
+  return string
+}
+
+// 함수를 호출
+hello(name: "전수열", time: 3)
+```
+
+> 파라미터 이름을 _로 정의하면 함수를 호출할 때 파라미터 이름을 생략할 수 있게 됩니다.
+
+```swift
+func hello(_ name: String, time: Int) {
+  // ...
+}
+hello("홍길동", time: 3) // 'name:' 이 생략되었습니다.
+```
+
+> 파라미터에 기본 값을 지정할 수도 있습니다. 기본 값이 지정된 파라미터는 함수 호출시 생략할 수 있습니다.
+```swift
+func hello(name: String, time: Int = 1) {
+  // ...
+}
+hello("홍길동")
+```
+
+>  함수 안에 정의한 함수를 반환할 수도 있습니다.
+
+```swift
+func helloGenerator(message: String) -> (String) -> String {
+  func hello(name: String) -> String {
+    return name + message
+  }
+  return hello
+}
+
+let hello = helloGenerator(message: "님 안녕하세요!")
+hello("전수열")
+```
+
+> helloGenerator() 안에 정의한 hello() 함수가 여러개의 파라미터를 받는다면 이렇게 써야 합니다.
+
+```swift
+func helloGenerator(message: String) -> (String, String) -> String {
+  func hello(firstName: String, lastName: String) -> String {
+    return lastName + firstName + message
+  }
+  return hello
+}
+
+let hello = helloGenerator(message: "님 안녕하세요!")
+hello("A", "B")
+```
+
+
+## 클로저 (Closure)
+
+클로저Closure를 사용하면 바로 위에 작성한 코드를 조금 더 간결하게 만들 수 있습니다. 클로저는 중괄호({})로 감싸진 '실행 가능한 코드 블럭'입니다.
+
+```swift
+func helloGenerator(message: String) -> (String, String) -> String {
+  return { (firstName: String, lastName: String) -> String in
+    return lastName + firstName + message
+  }
+}
+
+
+//Cocoa Touch의 클로저
+let action = UIAlertAction(title: String?, style: UIAlertActionStyle, handler ((UIAlertAction) -> Void)?)
+
+let action = UIAlertAction(title: "OK", style: .default) {
+  (UIAlertAction) in
+  // code
+}
+
+let action = UIAlertAction(title: "OK", style: .default) {
+  (action) in
+}
+```
 
 
 # 9. 클래스와 구조체
